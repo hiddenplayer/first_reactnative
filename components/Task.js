@@ -26,6 +26,13 @@ const styles = StyleSheet.create({
   itemLeft: {
     flexDirection: "row",
     alignItems: "center",
+    flexWrap: "wrap",
+  },
+  square: {
+    backgroundColor: "#55BCF6",
+    borderRadius: 5,
+    padding: 10,
+    marginRight: 10,
   },
   txt: {
     fontSize: 18,
@@ -36,11 +43,5 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     width: 12,
     height: 12,
-  },
-  square: {
-    backgroundColor: "#55BCF6",
-    borderRadius: 5,
-    padding: 10,
-    marginRight: 10,
   },
 });

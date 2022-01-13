@@ -1,29 +1,57 @@
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { Keyboard, StyleSheet, Text, TextInput, View } from "react-native";
+import { KeyboardAvoidingView, TouchableOpacity } from "react-native-web";
 import { Task } from "./components/Task";
 
 export default function App() {
+  const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
+
+  const handleAddTask = () => {
+    if (task == "") return;
+    Keyboard.dismiss;
+    setTasks([...tasks, task]);
+    setTask("");
+  };
+
+  const handleRemoveTask = (index) => {
+    const copy = [...tasks];
+    copy.splice(index, 1);
+    setTasks(copy);
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.tasksWraper}>
         <Text style={styles.title}>Today's tasks</Text>
-        <View style={styles.items}>{<Task text="aafef" />}</View>
-        <View style={styles.items}>{<Task text="aafef" />}</View>
-        <View style={styles.items}>{<Task text="aafef" />}</View>
+
+        {tasks.map((item, index) => {
+          return (
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleRemoveTask(index)}
+            >
+              <Task text={item} />
+            </TouchableOpacity>
+          );
+        })}
       </View>
 
-      <View style={styles.addTask}>
+      <KeyboardAvoidingView style={styles.addTaskWraper}>
         <TextInput
           placeholder="Write a task"
           style={styles.inputTask}
+          value={task}
+          onChangeText={(text) => setTask(text)}
         ></TextInput>
-        <View style={styles.plus}>
-          <Text>+</Text>
-        </View>
-      </View>
+
+        <TouchableOpacity onPress={() => handleAddTask()}>
+          <View style={styles.plus}>
+            <Text style={styles.plusTxt}>+</Text>
+          </View>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     </View>
   );
 }
@@ -41,10 +69,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingBottom: 30,
   },
-  items: {
-    marginTop: 5,
-  },
-  addTask: {
+  addTaskWraper: {
     position: "absolute",
     bottom: 60,
     width: "90%",
@@ -69,5 +94,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  plusTxt: {
+    fontSize: 28,
   },
 });
